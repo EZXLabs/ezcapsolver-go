@@ -1,0 +1,43 @@
+/bin/
+/dist/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test and coverage output
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Go workspace files, which are a local concern
+go.work
+go.work.sum
+
+# Vendored dependencies. This module has none, and committing a vendor tree
+# would only make that harder to notice.
+/vendor/
+
+.idea/
+*.iml
+
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+*.log
+/tmp/
+.env
+.env.*
+
+.claude/
+CLAUDE.md
+AGENTS.md

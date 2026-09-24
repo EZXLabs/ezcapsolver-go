@@ -1,0 +1,25 @@
+root = true
+
+# Default rules: UTF-8 encoding, LF line endings, preserve trailing blank lines
+# trim trailing whitespace, 4-space indentation.
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# gofmt indents with tabs and is not configurable. Anything else here would just
+# be undone on the next save.
+[*.go]
+indent_style = tab
+
+[go.mod]
+indent_style = tab
+
+[*.{toml,yml,yaml,json}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

@@ -1,0 +1,66 @@
+name: Release
+
+# Pushing a v* tag generates release notes from the commit history and creates a
+# GitHub Release.
+#
+# There is nothing to publish anywhere else: Go modules are served straight from
+# the tag, and proxy.golang.org picks it up the first time somebody fetches it.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    name: Verify the tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      # The version constant ends up in the User-Agent, so a tag that disagrees
+      # with it would ship a build that misreports itself. Once a tag is
+      # published Go modules treat it as immutable, so this has to fail here.
+      - name: Version constant matches the tag
+        run: |
+          declared=$(grep -oE 'Version = "[^"]+"' version.go | cut -d'"' -f2)
+          if [ "v$declared" != "${{ github.ref_name }}" ]; then
+            echo "::error::tag ${{ github.ref_name }} does not match Version $declared in version.go"
+            exit 1
+          fi
+
+      - name: Test
+        run: go test -race ./...
+
+  changelog:
+    name: Changelog
+    needs: [verify]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          # Prerelease tags (containing '-', such as v1.0.0-rc.1) are not yet
+          # part of cliff's tag sequence; generate them with --unreleased.
+          args: ${{ contains(github.ref_name, '-') && format('--unreleased --tag {0}', github.ref_name) || '--latest' }} --strip header
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: CHANGES.md
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # SemVer pre-release versions (containing "-") are marked as such.
+          prerelease: ${{ contains(github.ref_name, '-') }}

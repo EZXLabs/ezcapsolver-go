@@ -1,0 +1,68 @@
+fail_fast: false
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: fix-byte-order-marker
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      # gofmt has no --check flag: it lists the files it would rewrite and exits
+      # zero either way, so the empty listing has to be turned into the pass
+      # condition by hand.
+      - id: gofmt
+        name: gofmt
+        description: Check that Go sources are gofmt-formatted.
+        entry: bash -c 'unformatted=$(gofmt -l .); if [ -n "$unformatted" ]; then echo "not gofmt-formatted:"; echo "$unformatted"; exit 1; fi'
+        language: system
+        types: [go]
+        pass_filenames: false
+
+      - id: go-vet
+        name: go vet
+        description: Report suspicious constructs.
+        entry: bash -c 'go vet ./...'
+        language: system
+        types: [go]
+        pass_filenames: false
+
+      - id: staticcheck
+        name: staticcheck
+        description: Lint Go sources.
+        entry: bash -c 'staticcheck ./...'
+        language: system
+        types: [go]
+        pass_filenames: false
+
+      - id: typos
+        name: typos
+        description: Check spelling in sources and documentation.
+        entry: bash -c 'typos'
+        language: system
+        pass_filenames: false
+
+      - id: go-test
+        name: go test
+        description: Run the test suite with the race detector.
+        entry: bash -c 'go test -race ./...'
+        language: system
+        types: [go]
+        pass_filenames: false
+
+      # Examples carry //go:build ignore, so `go build ./...` never sees them and
+      # they rot silently. Compile each one explicitly instead.
+      - id: go-build-examples
+        name: go build examples
+        description: Compile every example script.
+        entry: bash -c 'status=0; while IFS= read -r file; do go build -o /dev/null "$file" || status=1; done < <(find examples -name "*.go" | sort); exit $status'
+        language: system
+        files: ^examples/.*\.go$
+        pass_filenames: false

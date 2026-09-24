@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Read-only by default. No job here writes to the repository, and an
+# unspecified block inherits whatever the repository setting happens to be.
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Format & Vet & Staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      # gofmt has no --check flag; it lists the files it would rewrite, so an
+      # empty listing is the pass condition.
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "::error::these files are not gofmt-formatted:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: go vet
+        run: go vet ./...
+
+      # Pinned on purpose: a new staticcheck release brings new checks, which
+      # would turn CI red without a line of code having changed. Dependabot does
+      # not see a version written here, so bumping it is a deliberate commit of
+      # its own — which is the point.
+      #
+      # v0.8.1 builds with the module's own floor, so setup-go's GOTOOLCHAIN=local
+      # is left alone. If a future pin stops installing under it, that is worth
+      # hearing about rather than working around: it means the tools have moved
+      # past the floor and the floor is due for review.
+      - name: staticcheck
+        uses: dominikh/staticcheck-action@v1
+        with:
+          version: "v0.8.1"
+          install-go: false
+
+      # The module has no dependencies, so this is really a guard: it fails if
+      # one was added without updating go.mod, or if go.mod drifted.
+      - name: go mod tidy is a no-op
+        run: |
+          go mod tidy
+          if ! git diff --quiet; then
+            echo "::error::go mod tidy changed tracked files; commit the result"
+            git diff --stat
+            exit 1
+          fi
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The floor declared in go.mod, and whatever is current. A library has
+        # to keep working on both.
+        go-version: ["1.26", "stable"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      # Tests run against httptest servers and never touch the real API:
+      # creating a task is billed.
+      - name: go test
+        run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Report coverage
+        run: go tool cover -func=coverage.out | tail -1
+
+  examples:
+    name: Examples compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      # Examples carry //go:build ignore so they stay out of the package build,
+      # which also means `go build ./...` never checks them. Compile each one
+      # explicitly, or they rot silently.
+      - name: Build every example
+        run: |
+          status=0
+          while IFS= read -r file; do
+            if ! go build -o /dev/null "$file"; then
+              echo "::error file=$file::example does not compile"
+              status=1
+            fi
+          done < <(find examples -name '*.go' | sort)
+          exit $status
+
+  typos:
+    name: Typos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: crate-ci/typos@v1.50.1
+
+  govulncheck:
+    name: Vulnerability scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      # With no third-party dependencies, this is scanning the standard library
+      # the module is built against — which is why the floor has to stay on a
+      # Go release that still receives security fixes. An end-of-life floor puts
+      # this job in a state the SDK itself cannot fix.
+      - name: govulncheck
+        run: |
+          # Pinned for the same reason as staticcheck, and bumped the same way.
+          go install golang.org/x/vuln/cmd/govulncheck@v1.7.0
+          govulncheck ./...
