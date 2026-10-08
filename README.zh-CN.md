@@ -107,7 +107,7 @@ go get github.com/EZXLabs/ezcapsolver-go
 
 ## 🚀 快速开始
 
-不显式传密钥时，客户端从环境变量 `EZCAPTCHA_API_KEY` 读取。
+将 `YOUR_API_KEY` 替换为你的密钥。不显式传密钥时，客户端从环境变量 `EZCAPSOLVER_API_KEY` 读取。
 
 ```go
 package main
@@ -121,7 +121,7 @@ import (
 )
 
 func main() {
-	client, err := ezcapsolver.NewClient()
+	client, err := ezcapsolver.NewClient(ezcapsolver.WithClientKey("YOUR_API_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -771,7 +771,7 @@ solved, err = ezcapsolver.SyncSolveAs[myShape](ctx, client, "BrandNewSyncType", 
 
 ```go
 client, err := ezcapsolver.NewClient(
-	ezcapsolver.WithClientKey("your-client-key"),
+	ezcapsolver.WithClientKey("YOUR_API_KEY"),
 	ezcapsolver.WithTimeout(30*time.Second),
 	ezcapsolver.WithSyncTimeout(240*time.Second),
 	ezcapsolver.WithPolling(ezcapsolver.PollingConfig{Interval: 3 * time.Second, MaxAttempts: 50}),
@@ -783,7 +783,7 @@ client, err := ezcapsolver.NewClient(
 
 | 配置项 | 默认值 | 作用范围 |
 | --- | :---: | --- |
-| `WithClientKey` | `EZCAPTCHA_API_KEY` | 不传时回落到环境变量 |
+| `WithClientKey` | `EZCAPSOLVER_API_KEY` | 不传时回落到环境变量 |
 | `WithTimeout` | 30 秒 | 异步端点请求超时 |
 | `WithSyncTimeout` | 240 秒 | 同步端点请求超时 |
 | `WithPolling` | 3 秒 × 50 | 结果查询，每个任务最多等 150 秒 |
@@ -869,16 +869,17 @@ slog 没有 trace 级别，所以 `LevelTrace` 定在 `slog.LevelDebug` 下面�
 logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 	Level: ezcapsolver.LevelTrace,
 }))
-client, err := ezcapsolver.NewClient(ezcapsolver.WithLogger(logger))
+client, err := ezcapsolver.NewClient(
+	ezcapsolver.WithClientKey("YOUR_API_KEY"),
+	ezcapsolver.WithLogger(logger),
+)
 ```
 
 ## 🧪 可运行示例
 
-[`examples/`](./examples) 下每种任务类型一个可运行文件，文件名取自线格式的任务类型名。先设好 `EZCAPTCHA_API_KEY`，然后在仓库根目录运行：
+[`examples/`](./examples) 下每种任务类型一个可运行文件，文件名取自线格式的任务类型名。先把示例中的占位符 `YOUR_API_KEY` 替换为你的密钥，然后在仓库根目录运行：
 
 ```bash
-export EZCAPTCHA_API_KEY=your-client-key
-
 go run examples/recaptcha_v2/recaptcha_v2_task_proxyless.go
 go run examples/cloudflare/cloud_flare_turnstile_task.go
 go run examples/tls_forward/tls_task.go

@@ -8,13 +8,12 @@
 每个文件都带 `//go:build ignore`，因此不会进入 `go build ./...`，但可以直接运行：
 
 ```bash
-export EZCAPTCHA_API_KEY=your-key
 go run examples/recaptcha_v2/recaptcha_v2_task_proxyless.go
 ```
 
 请在仓库根目录运行——分类类示例要从 `examples/fixtures/` 读图片。
 
-示例一律不硬编码密钥；需要代理的从 `EZCAPTCHA_PROXY` 读。
+所有示例都使用占位密钥 `YOUR_API_KEY`，运行前替换成你自己的密钥；需要代理的从 `EZCAPTCHA_PROXY` 读。
 
 > 每次运行都会创建真实任务并**计费**，worker 失败也照扣。reCAPTCHA v2 与 hCaptcha
 > 两个示例指向厂商自己的 demo 页面，可以直接跑通；其余示例里的 site key 是占位值，

@@ -27,7 +27,10 @@ func main() {
 		Level: ezcapsolver.LevelTrace,
 	}))
 
-	client, err := ezcapsolver.NewClient(ezcapsolver.WithLogger(logger))
+	client, err := ezcapsolver.NewClient(
+		ezcapsolver.WithClientKey("YOUR_API_KEY"),
+		ezcapsolver.WithLogger(logger),
+	)
 	if err != nil {
 		// A configuration error is the one failure that surfaces here rather
 		// than on a request: everything checkable is checked at construction,

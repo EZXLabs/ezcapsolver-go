@@ -33,7 +33,7 @@ type EzCapSolverClient struct {
 	logger   *slog.Logger
 }
 
-// NewClient builds a client, reading the client key from the EZCAPTCHA_API_KEY
+// NewClient builds a client, reading the client key from the EZCAPSOLVER_API_KEY
 // environment variable unless [WithClientKey] supplies one.
 //
 // Configuration is validated here rather than on the first request, so a bad

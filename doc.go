@@ -10,7 +10,7 @@
 // [EzCapSolverClient.Solve] / [EzCapSolverClient.SyncSolve] take a type name and a
 // parameter map, and [SolveAs] / [SyncSolveAs] decode into a caller's struct.
 //
-//	client, err := ezcapsolver.NewClient()
+//	client, err := ezcapsolver.NewClient(ezcapsolver.WithClientKey("YOUR_API_KEY"))
 //	if err != nil {
 //		return err
 //	}
@@ -23,7 +23,7 @@
 //	}
 //	fmt.Println(solved.Solution.Token)
 //
-// The client key is read from the EZCAPTCHA_API_KEY environment variable unless
+// The client key is read from the EZCAPSOLVER_API_KEY environment variable unless
 // [WithClientKey] supplies one.
 //
 // # Errors

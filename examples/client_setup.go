@@ -21,8 +21,8 @@ import (
 )
 
 func main() {
-	// The shortest form: the key comes from EZCAPTCHA_API_KEY.
-	client, err := ezcapsolver.NewClient()
+	// The shortest form: only the key, every other setting at its default.
+	client, err := ezcapsolver.NewClient(ezcapsolver.WithClientKey("YOUR_API_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func main() {
 
 	configured, err := ezcapsolver.NewClient(
 		// An explicit key wins over the environment variable.
-		ezcapsolver.WithClientKey(os.Getenv("EZCAPTCHA_API_KEY")),
+		ezcapsolver.WithClientKey("YOUR_API_KEY"),
 
 		// Two separate budgets, and they should stay separate. Asynchronous
 		// calls just enqueue and poll, so 30 seconds is already generous.

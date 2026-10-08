@@ -20,7 +20,7 @@ import (
 func main() {
 	ctx := context.Background()
 
-	client, err := ezcapsolver.NewClient()
+	client, err := ezcapsolver.NewClient(ezcapsolver.WithClientKey("YOUR_API_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}

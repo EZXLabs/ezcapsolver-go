@@ -20,7 +20,7 @@ const (
 	DefaultSyncBaseURL = "https://sync.ez-captcha.com"
 
 	// DefaultClientKeyEnv is read when no client key is supplied explicitly.
-	DefaultClientKeyEnv = "EZCAPTCHA_API_KEY"
+	DefaultClientKeyEnv = "EZCAPSOLVER_API_KEY"
 
 	// DefaultTimeout bounds one call to an asynchronous endpoint or the balance
 	// endpoint. Those are millisecond-scale enqueue and lookup operations, so a

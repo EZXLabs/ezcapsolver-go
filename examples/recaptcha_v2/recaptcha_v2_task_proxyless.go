@@ -5,7 +5,7 @@
 // Task type: `ReCaptchaV2TaskProxyless`
 //
 // The site below is Google's own reCAPTCHA demo page, so this example runs as
-// written once EZCAPTCHA_API_KEY is set:
+// written once YOUR_API_KEY is replaced with your key:
 //
 //	go run examples/recaptcha_v2/recaptcha_v2_task_proxyless.go
 //
@@ -23,8 +23,7 @@ import (
 func main() {
 	ctx := context.Background()
 
-	// With no key passed, the client reads EZCAPTCHA_API_KEY from the environment.
-	client, err := ezcapsolver.NewClient()
+	client, err := ezcapsolver.NewClient(ezcapsolver.WithClientKey("YOUR_API_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}

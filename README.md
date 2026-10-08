@@ -107,7 +107,7 @@ Requires Go 1.26+. **Zero third-party dependencies** — the standard library on
 
 ## 🚀 Quick Start
 
-The client reads `EZCAPTCHA_API_KEY` from the environment when no key is passed explicitly.
+Replace `YOUR_API_KEY` with your client key. When no key is passed explicitly, the client reads `EZCAPSOLVER_API_KEY` from the environment.
 
 ```go
 package main
@@ -121,7 +121,7 @@ import (
 )
 
 func main() {
-	client, err := ezcapsolver.NewClient()
+	client, err := ezcapsolver.NewClient(ezcapsolver.WithClientKey("YOUR_API_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -775,7 +775,7 @@ solved, err = ezcapsolver.SyncSolveAs[myShape](ctx, client, "BrandNewSyncType", 
 
 ```go
 client, err := ezcapsolver.NewClient(
-	ezcapsolver.WithClientKey("your-client-key"),
+	ezcapsolver.WithClientKey("YOUR_API_KEY"),
 	ezcapsolver.WithTimeout(30*time.Second),
 	ezcapsolver.WithSyncTimeout(240*time.Second),
 	ezcapsolver.WithPolling(ezcapsolver.PollingConfig{Interval: 3 * time.Second, MaxAttempts: 50}),
@@ -787,7 +787,7 @@ client, err := ezcapsolver.NewClient(
 
 | Setting | Default | Scope |
 | --- | :---: | --- |
-| `WithClientKey` | `EZCAPTCHA_API_KEY` | Falls back to the environment variable |
+| `WithClientKey` | `EZCAPSOLVER_API_KEY` | Falls back to the environment variable |
 | `WithTimeout` | 30 s | Request timeout for the asynchronous endpoint |
 | `WithSyncTimeout` | 240 s | Request timeout for the synchronous endpoint |
 | `WithPolling` | 3 s × 50 | Result queries, up to 150 s per task |
@@ -873,16 +873,17 @@ slog has no trace level, so `LevelTrace` sits one step below `slog.LevelDebug`. 
 logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 	Level: ezcapsolver.LevelTrace,
 }))
-client, err := ezcapsolver.NewClient(ezcapsolver.WithLogger(logger))
+client, err := ezcapsolver.NewClient(
+	ezcapsolver.WithClientKey("YOUR_API_KEY"),
+	ezcapsolver.WithLogger(logger),
+)
 ```
 
 ## 🧪 Runnable Examples
 
-[`examples/`](./examples) holds one runnable file per task type, named after the wire task type. Set `EZCAPTCHA_API_KEY`, then run them from the repository root:
+[`examples/`](./examples) holds one runnable file per task type, named after the wire task type. Replace the `YOUR_API_KEY` placeholder in the examples with your client key, then run them from the repository root:
 
 ```bash
-export EZCAPTCHA_API_KEY=your-client-key
-
 go run examples/recaptcha_v2/recaptcha_v2_task_proxyless.go
 go run examples/cloudflare/cloud_flare_turnstile_task.go
 go run examples/tls_forward/tls_task.go

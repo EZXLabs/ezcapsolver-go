@@ -9,14 +9,14 @@ Every file carries `//go:build ignore`, which keeps them out of `go build ./...`
 while leaving them runnable directly:
 
 ```bash
-export EZCAPTCHA_API_KEY=your-key
 go run examples/recaptcha_v2/recaptcha_v2_task_proxyless.go
 ```
 
 Run them from the repository root — the classification examples read their
 images from `examples/fixtures/`.
 
-No example hardcodes a key. Ones that need a proxy read `EZCAPTCHA_PROXY`.
+Every example passes the placeholder key `YOUR_API_KEY`; replace it with your
+own key before running. Ones that need a proxy read `EZCAPTCHA_PROXY`.
 
 > Every run creates a real task and is billed, whether or not the worker
 > succeeds. The reCAPTCHA v2 and hCaptcha examples point at the vendors' own
