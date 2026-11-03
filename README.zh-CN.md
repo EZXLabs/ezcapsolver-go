@@ -109,6 +109,8 @@ go get github.com/EZXLabs/ezcapsolver-go
 
 将 `YOUR_API_KEY` 替换为你的密钥。不显式传密钥时，客户端从环境变量 `EZCAPSOLVER_API_KEY` 读取。
 
+完整 API 接入流程请查看 [EZCaptchaSolver 快速入门](https://docs.ezxlabs.com/zh/docs/captcha/guide)。
+
 ```go
 package main
 
@@ -183,6 +185,8 @@ solved, err = client.SyncSolveRecaptchaV2TaskProxyless(ctx, task)
 ### reCAPTCHA v2
 
 [reCAPTCHA v2 API 文档](https://docs.ezxlabs.com/zh/docs/captcha/api/recaptcha-v2)
+
+选择任务类型或查找 `websiteURL`、`websiteKey`、`pageAction` 时，请查看 [ReCaptcha 任务类型选择](https://docs.ezxlabs.com/zh/docs/captcha/tutorials/identify-recaptcha-version) 和 [ReCaptcha 任务参数查找](https://docs.ezxlabs.com/zh/docs/captcha/tutorials/find-recaptcha-parameters)。
 
 前五个类型共用 `RecaptchaV2Task` 与 `RecaptchaSolution`，只有方法名不同。
 
@@ -411,6 +415,8 @@ fmt.Println("token:", solved.Solution.Token)
 
 <a id="task-funcaptchaclassification"></a>
 
+[FunCaptcha 图片识别 API 文档](https://docs.ezxlabs.com/zh/docs/captcha/api/funcaptcha-classification)
+
 #### FunCaptchaClassification
 
 ```go
@@ -581,6 +587,8 @@ fmt.Println("payload:", solved.Solution.Payload)
 ```
 
 ### DataDome
+
+[DataDome API 文档](https://docs.ezxlabs.com/zh/docs/captcha/api/datadome)
 
 <a id="task-datadometaskproxyless"></a>
 
