@@ -32,7 +32,7 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 
 同一种验证码任务类型能够同时支持同步和异步两种，几乎所有类型都会支持同步方式。然后有部分类型只会支持异步方式。
 
-### reCAPTCHA v2
+### [reCAPTCHA v2](https://ezxlabs.com/zh/products/recaptchav2)
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
@@ -41,9 +41,9 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 | `ReCaptchaV2STaskProxyless` | all | [示例](#task-recaptchav2staskproxyless) | reCAPTCHA v2 携带挑战绑定的 `s` 参数 |
 | `ReCaptchaV2EnterpriseTaskProxyless` | all | [示例](#task-recaptchav2enterprisetaskproxyless) | reCAPTCHA v2 企业版 |
 | `ReCaptchaV2SEnterpriseTaskProxyless` | all | [示例](#task-recaptchav2senterprisetaskproxyless) | reCAPTCHA v2 企业版，并携带 `s` 参数 |
-| `ReCaptchaV2Classification` | sync | [示例](#task-recaptchav2classification) | reCAPTCHA v2 图片识别 |
+| `ReCaptchaV2Classification` | sync | [示例](#task-recaptchav2classification) | [reCAPTCHA v2 图片识别](https://ezxlabs.com/zh/products/image-captcha) |
 
-### reCAPTCHA v3
+### [reCAPTCHA v3](https://ezxlabs.com/zh/products/recaptchav3)
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
@@ -52,14 +52,14 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 | `ReCaptchaV3EnterpriseTaskProxyless` | all | [示例](#task-recaptchav3enterprisetaskproxyless) | reCAPTCHA v3 企业版 |
 | `ReCaptchaV3EnterpriseTaskProxylessS9` | all | [示例](#task-recaptchav3enterprisetaskproxylesss9) | reCAPTCHA v3 企业版 返回分值 ≥ 0.9 的 token |
 
-### FunCaptcha / Arkose Labs
+### [FunCaptcha / Arkose Labs](https://ezxlabs.com/zh/products/funcaptcha)
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
 | `FuncaptchaTaskProxyless` | async | [示例](#task-funcaptchataskproxyless) | FunCaptcha / Arkose Labs 解决方案 |
 | `FunCaptchaClassification` | sync | [示例](#task-funcaptchaclassification) | FunCaptcha 图片识别 |
 
-### hCaptcha
+### [hCaptcha](https://ezxlabs.com/zh/products/hcaptcha)
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
@@ -70,10 +70,10 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
-| `CloudFlare5STask` | async | [示例](#task-cloudflare5stask) | CF 5 秒盾，**必须**传 `Proxy` |
-| `CloudFlareTurnstileTask` | async | [示例](#task-cloudflareturnstiletask) | Turnstile，返回 token |
+| `CloudFlare5STask` | async | [示例](#task-cloudflare5stask) | [CF 5 秒盾](https://ezxlabs.com/zh/products/cloudflare-5s)，**必须**传 `Proxy` |
+| `CloudFlareTurnstileTask` | async | [示例](#task-cloudflareturnstiletask) | [Turnstile](https://ezxlabs.com/zh/products/cloudflare-turnstile)，返回 token |
 
-### Akamai
+### [Akamai](https://ezxlabs.com/zh/products/akamai)
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
@@ -82,7 +82,7 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 
 > Akamai Web 是多轮流程：把本轮返回的 `Encodedata` 作为下一轮的 `EncodeData` 传入。这两个拼写在线格式上就是不同的，SDK 原样保留服务端的定义，不做「修正」。
 
-### DataDome
+### [DataDome](https://ezxlabs.com/zh/products/datadome)
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
@@ -93,9 +93,9 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
-| `PerimeterX` | async | [示例](#task-perimeterx) | PerimeterX 放行 cookie |
-| `IncapsulaTaskProxyless` | sync | [示例](#task-incapsulataskproxyless) | Incapsula Reese84 载荷 |
-| `TlsTask` | sync | [示例](#task-tlstask) | HTTP TLS 转发请求，返回上游响应 |
+| `PerimeterX` | async | [示例](#task-perimeterx) | [PerimeterX 放行 cookie](https://ezxlabs.com/zh/products/perimeterx) |
+| `IncapsulaTaskProxyless` | sync | [示例](#task-incapsulataskproxyless) | [Incapsula Reese84 载荷](https://ezxlabs.com/zh/products/incapsula) |
+| `TlsTask` | sync | [示例](#task-tlstask) | [HTTP TLS 转发请求](https://ezxlabs.com/zh/products/tls-forward)，返回上游响应 |
 
 ## 📦 安装
 
