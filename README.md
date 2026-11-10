@@ -70,8 +70,8 @@ A captcha type can support both forms at once, and almost every type supports th
 
 | Task type | Modes | Example | Description |
 | :-: | :---: | :-: | --- |
-| `CloudFlare5STask` | async | [Example](#task-cloudflare5stask) | [CF five-second interstitial](https://ezxlabs.com/products/cloudflare-5s), **requires** a `Proxy` |
-| `CloudFlareTurnstileTask` | async | [Example](#task-cloudflareturnstiletask) | [Turnstile](https://ezxlabs.com/products/cloudflare-turnstile), returns a token |
+| `CloudFlare5STask` | async | [Example](#task-cloudflare5stask) | [Cloudflare 5s Challenge](https://ezxlabs.com/products/cloudflare-5s); **requires** a `proxy` and returns browser state, not a token |
+| `CloudFlareTurnstileTask` | async | [Example](#task-cloudflareturnstiletask) | [Cloudflare Turnstile](https://ezxlabs.com/products/cloudflare-turnstile); returns a token |
 
 ### [Akamai](https://ezxlabs.com/products/akamai)
 
@@ -89,13 +89,13 @@ A captcha type can support both forms at once, and almost every type supports th
 | `DataDomeTaskProxyless` | sync | [Example](#task-datadometaskproxyless) | The challenge after an interception, in two steps selected by `Step` |
 | `DataDomeTagsTaskProxyless` | sync | [Example](#task-datadometagstaskproxyless) | Reports a fingerprint on the normal browsing path |
 
-### Other
+### Other protection and forwarding tasks
 
 | Task type | Modes | Example | Description |
 | :-: | :---: | :-: | --- |
-| `PerimeterX` | async | [Example](#task-perimeterx) | [PerimeterX clearance cookies](https://ezxlabs.com/products/perimeterx) |
-| `IncapsulaTaskProxyless` | sync | [Example](#task-incapsulataskproxyless) | [Incapsula Reese84 payload](https://ezxlabs.com/products/incapsula) |
-| `TlsTask` | sync | [Example](#task-tlstask) | [HTTP request forwarded over TLS](https://ezxlabs.com/products/tls-forward), returns the upstream response |
+| `PerimeterX` | async | [Example](#task-perimeterx) | [PerimeterX](https://ezxlabs.com/products/perimeterx) Press & Hold verification; returns `_px3` and related clearance cookies |
+| `IncapsulaTaskProxyless` | sync | [Example](#task-incapsulataskproxyless) | [Incapsula](https://ezxlabs.com/products/incapsula) Reese84 verification; returns the payload to submit to Imperva |
+| `TlsTask` | sync | [Example](#task-tlstask) | [TLS fingerprint forwarding](https://ezxlabs.com/products/tls-forward) for HTTPS requests through your proxy; returns the upstream response |
 
 ## 📦 Installation
 
