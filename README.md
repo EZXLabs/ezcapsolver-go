@@ -103,7 +103,7 @@ A captcha type can support both forms at once, and almost every type supports th
 go get github.com/EZXLabs/ezcapsolver-go
 ```
 
-Requires Go 1.26+. **Zero third-party dependencies** — the standard library only, and nothing added to your dependency tree.
+Requires Go 1.26+.
 
 ## 🚀 Quick Start
 

@@ -15,8 +15,8 @@ coverage.html
 go.work
 go.work.sum
 
-# Vendored dependencies. This module has none, and committing a vendor tree
-# would only make that harder to notice.
+# Vendored dependencies. They come from the module proxy, so a vendor tree is
+# never committed.
 /vendor/
 
 .idea/

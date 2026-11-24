@@ -54,8 +54,8 @@ jobs:
           version: "v0.8.1"
           install-go: false
 
-      # The module has no dependencies, so this is really a guard: it fails if
-      # one was added without updating go.mod, or if go.mod drifted.
+      # Fails if a dependency was added or dropped without updating go.mod and
+      # go.sum, or if either drifted.
       - name: go mod tidy is a no-op
         run: |
           go mod tidy
@@ -126,10 +126,10 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
-      # With no third-party dependencies, this is scanning the standard library
-      # the module is built against — which is why the floor has to stay on a
-      # Go release that still receives security fixes. An end-of-life floor puts
-      # this job in a state the SDK itself cannot fix.
+      # This scans the dependencies and the standard library the module is built
+      # against — which is why the floor has to stay on a Go release that still
+      # receives security fixes. An end-of-life floor puts this job in a state
+      # the SDK itself cannot fix.
       - name: govulncheck
         run: |
           # Pinned for the same reason as staticcheck, and bumped the same way.

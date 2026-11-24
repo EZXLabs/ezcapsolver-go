@@ -1,8 +1,6 @@
 version: 2
 updates:
-  # Go. The module has no third-party dependencies, so this only tracks the
-  # toolchain directive in go.mod — it should stay quiet, and a PR here is a
-  # signal that something was added.
+  # Go modules, and the toolchain directive in go.mod.
   - package-ecosystem: gomod
     directory: /
     schedule:

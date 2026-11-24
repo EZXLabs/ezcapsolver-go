@@ -103,7 +103,7 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 go get github.com/EZXLabs/ezcapsolver-go
 ```
 
-需要 Go 1.26+。**零第三方依赖**——只用标准库，不往你的依赖树里塞任何东西。
+需要 Go 1.26+。
 
 ## 🚀 快速开始
 
