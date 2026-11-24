@@ -2,16 +2,20 @@ package ezcapsolver
 
 import "encoding/json"
 
-// DataDomeStep selects which half of the DataDome challenge flow to run.
+// DataDomeStep selects which step of the DataDome challenge flow to run.
 //
 // It is a string on the wire, not a number.
 type DataDomeStep string
 
 const (
-	// DataDomeStepOne fetches the challenge URL.
+	// DataDomeStepOne finds the challenge address of an intercepted page.
 	DataDomeStepOne DataDomeStep = "1"
-	// DataDomeStepTwo produces the validation instructions.
+	// DataDomeStepTwo asks whether the service already caches a challenge
+	// script, by [DataDomeTask.Hash].
 	DataDomeStepTwo DataDomeStep = "2"
+	// DataDomeStepThree computes the answer to submit from the challenge page
+	// and its script.
+	DataDomeStepThree DataDomeStep = "3"
 )
 
 // DataDomeJsType selects the DataDome tags JavaScript mode.
@@ -30,10 +34,11 @@ const (
 //
 // Every field name here is snake_case, unlike [DataDomeTagsTask].
 type DataDomeTask struct {
-	// HtmlB64 is the base64-encoded challenge HTML. Required.
-	HtmlB64 string `json:"html_b64"`
-	// Step is the step of the workflow. Required; the service accepts only "1"
-	// and "2". Leaving it empty sends [DataDomeStepOne].
+	// HtmlB64 is the base64-encoded page: the intercepted page on step one, the
+	// challenge page on step three. Step two leaves it empty.
+	HtmlB64 string `json:"html_b64,omitzero"`
+	// Step is the step of the workflow. Required; the service accepts only "1",
+	// "2" and "3". Leaving it empty sends [DataDomeStepOne].
 	Step DataDomeStep `json:"step"`
 	// Image is an optional base64-encoded image.
 	Image string `json:"image"`
@@ -48,6 +53,17 @@ type DataDomeTask struct {
 	ParentURL string `json:"parent_url,omitzero"`
 	// Equipment is the optional equipment identifier.
 	Equipment string `json:"equipment,omitzero"`
+	// Hash is, on step two, the hash of the challenge script to look up in the
+	// service cache.
+	Hash string `json:"hash,omitzero"`
+	// UserAgent is the optional browser User-Agent the challenge is solved for.
+	UserAgent string `json:"user_agent,omitzero"`
+	// ExternalJsHash is, on step three, the hash of the challenge script, when
+	// step two reported it cached.
+	ExternalJsHash string `json:"external_js_hash,omitzero"`
+	// ExternalJsBase64 is, on step three, the base64-encoded challenge script,
+	// when step two reported it not cached.
+	ExternalJsBase64 string `json:"external_js_base64,omitzero"`
 	// Extra carries parameters this release does not model.
 	Extra map[string]any `json:"-"`
 }

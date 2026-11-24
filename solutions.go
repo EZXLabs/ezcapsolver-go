@@ -272,20 +272,28 @@ func (s TLSForwardSolution) MarshalJSON() ([]byte, error) {
 	return marshalWithExtra(wire(s), s.Extra)
 }
 
-// DataDomeSolution is returned by both DataDome challenge steps and by both
+// DataDomeSolution is returned by every DataDome challenge step and by both
 // DataDome task types.
 //
-// Step one carries the challenge address in URL, step two the validation
-// instructions. Earlier workers returned step one as a bare string; it is an
-// object now, which is why both steps decode into this one type — and why
-// [Solved.Raw] does not narrow along with the model.
+// Step one carries the challenge address in URL, step two whether the
+// challenge script is cached in Status, and step three the submission.
+// Earlier workers returned step one as a bare string; it is an object now,
+// which is why every step decodes into this one type — and why [Solved.Raw]
+// does not narrow along with the model.
 type DataDomeSolution struct {
 	// Kind is the challenge kind, such as `slider` or `interstitial`.
 	Kind string `json:"kind"`
-	// URL is the challenge URL on step one and the validation endpoint on step two.
+	// URL is the challenge URL on step one and the submission URL on step three.
 	URL string `json:"url"`
-	// Body is the optional validation request body.
+	// Body is the optional submission body on step three.
 	Body string `json:"body"`
+	// Status reports on step two whether the service already caches the
+	// challenge script. An answer without it reads as false: not cached.
+	Status bool `json:"status"`
+	// SubmitAfterMs is, on step three, how many milliseconds to wait before
+	// submitting, counted from when the challenge page loaded. Zero when the
+	// worker names no delay.
+	SubmitAfterMs int `json:"submit_after_ms"`
 	// Extra holds worker fields this release does not declare.
 	Extra map[string]any `json:"-"`
 }
