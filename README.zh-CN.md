@@ -86,7 +86,7 @@ EZCaptchaSolver Go SDK 是 [EZXLabs](https://ezxlabs.com) 维护的开源 Go 客
 
 | 任务类型 | 支持方式 | 示例 | 描述 |
 | :-: | :---: | :-: | --- |
-| `DataDomeTaskProxyless` | sync | [示例](#task-datadometaskproxyless) | 拦截后的挑战，分两步，靠 `Step` 区分 |
+| `DataDomeTaskProxyless` | sync | [示例](#task-datadometaskproxyless) | 拦截后的挑战，分三步，靠 `Step` 区分 |
 | `DataDomeTagsTaskProxyless` | sync | [示例](#task-datadometagstaskproxyless) | 正常浏览路径上报指纹 |
 
 ### 其他防护与转发任务
@@ -594,7 +594,7 @@ fmt.Println("payload:", solved.Solution.Payload)
 
 #### DataDomeTaskProxyless
 
-DataDome 拦截后的挑战分两步，两步共用 `DataDomeTask`，靠 `Step` 区分；`DataDomeSolution` 里哪些字段有值取决于当前是哪一步：
+DataDome 拦截后的挑战分三步，三步共用 `DataDomeTask`，靠 `Step` 区分。第一步从被拦截页面拿到挑战地址，第二步用 `Hash` 询问服务端是否已缓存挑战脚本，第三步在 `URL`、`Body`、`SubmitAfterMs` 里返回交卷信息：
 
 ```go
 // 第一步：从被拦截页面拿到挑战地址。
@@ -608,7 +608,7 @@ if err != nil {
 
 fmt.Println("挑战地址:", solved.Solution.URL)
 
-// 第二步换成 ezcapsolver.DataDomeStepTwo，结果里带回校验用的 Body。
+// 第二步传脚本 Hash、读 Status；第三步传挑战页和脚本，脚本已缓存时只传 hash。
 ```
 
 <a id="task-datadometagstaskproxyless"></a>
