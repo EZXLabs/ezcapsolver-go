@@ -439,6 +439,38 @@ func TestRequiredEnumsFallBackToTheirDefault(t *testing.T) {
 	}
 }
 
+// TestDataDomeStepsSendOnlyTheirOwnFields covers steps two and three, which
+// share DataDomeTask with step one but send a different set of fields.
+func TestDataDomeStepsSendOnlyTheirOwnFields(t *testing.T) {
+	stepTwo := marshalToMap(t, DataDomeTask{Step: DataDomeStepTwo, Hash: "script-hash"})
+	wantStepTwo := map[string]any{"step": "2", "image": "", "hash": "script-hash"}
+	if !reflect.DeepEqual(stepTwo, wantStepTwo) {
+		t.Errorf("step two sends no page, so html_b64 must be left out\n got: %v\nwant: %v",
+			stepTwo, wantStepTwo)
+	}
+
+	stepThree := marshalToMap(t, DataDomeTask{
+		HtmlB64:          "PGh0bWw+",
+		Step:             DataDomeStepThree,
+		Referer:          "https://geo.captcha-delivery.com/captcha/",
+		UserAgent:        "Mozilla/5.0",
+		ExternalJsHash:   "script-hash",
+		ExternalJsBase64: "c2NyaXB0",
+	})
+	want := map[string]any{
+		"html_b64":           "PGh0bWw+",
+		"step":               "3",
+		"image":              "",
+		"referer":            "https://geo.captcha-delivery.com/captcha/",
+		"user_agent":         "Mozilla/5.0",
+		"external_js_hash":   "script-hash",
+		"external_js_base64": "c2NyaXB0",
+	}
+	if !reflect.DeepEqual(stepThree, want) {
+		t.Errorf("step three wire form mismatch\n got: %v\nwant: %v", stepThree, want)
+	}
+}
+
 // TestDataDomeTagsFieldsIsNeverNull guards a Go-specific trap: a nil map
 // marshals to JSON null, and the service rejects null for this parameter while
 // accepting an empty object.

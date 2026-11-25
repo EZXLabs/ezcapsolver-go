@@ -10,7 +10,7 @@ Go 1.26 or newer. `go.mod` declares the minimum, and the toolchain will fetch a 
 
 The floor tracks the Go releases that still receive security fixes, rather than the oldest release the code could compile on. Go supports a major version until two newer ones exist, and `govulncheck` runs against the floor in CI — so a floor that has gone end-of-life reports standard-library vulnerabilities that no change to this SDK can fix.
 
-The SDK itself has **no dependencies** outside the standard library, and that is deliberate — a client library should not decide a caller's dependency tree for them. Please do not add one without discussing it first.
+A new dependency lands in the dependency tree of every caller that imports the package using it, so please discuss one before adding it.
 
 ### Development Tools
 

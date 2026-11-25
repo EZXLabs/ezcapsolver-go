@@ -376,7 +376,7 @@ func (c *EzCapSolverClient) SyncSolveAkamaiSBSDTaskProxyless(
 
 // SolveDataDomeTaskProxyless answers a DataDome challenge.
 //
-// Both steps of the flow return a [DataDomeSolution]; which fields are filled in
+// Every step of the flow returns a [DataDomeSolution]; which fields are filled in
 // depends on [DataDomeTask.Step].
 func (c *EzCapSolverClient) SolveDataDomeTaskProxyless(
 	ctx context.Context, task *DataDomeTask,

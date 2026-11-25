@@ -147,11 +147,21 @@ func TestSolutionModelDecoding(t *testing.T) {
 		}
 		wantExtra(t, stepOne.Extra, map[string]any{"later": float64(1)})
 
-		// Both steps and both DataDome task types share this one model.
+		// Every step and both DataDome task types share this one model.
 		var stepTwo DataDomeSolution
-		decode(t, `{"kind": "slider", "url": "https://check", "body": "b"}`, &stepTwo)
-		if stepTwo.Kind != "slider" || stepTwo.Body != "b" {
+		decode(t, `{"status": true}`, &stepTwo)
+		if !stepTwo.Status {
 			t.Errorf("step two: got %+v", stepTwo)
+		}
+
+		var stepThree DataDomeSolution
+		decode(t, `{"kind": "slider", "url": "https://check", "body": "b", "submit_after_ms": 1500}`,
+			&stepThree)
+		if stepThree.Kind != "slider" || stepThree.Body != "b" || stepThree.SubmitAfterMs != 1500 {
+			t.Errorf("step three: got %+v", stepThree)
+		}
+		if stepThree.Status {
+			t.Errorf("a missing status must read as not cached, got %+v", stepThree)
 		}
 	})
 
@@ -499,7 +509,7 @@ func TestEverySolutionRoundTrips(t *testing.T) {
 		{"TLSForward", `{"body":"b","code":200,"cookies":{"c":"d"},` +
 			`"headers":{"a":"b"},"status":1,"later":1}`,
 			func() any { return &TLSForwardSolution{} }},
-		{"DataDome", `{"body":"b","kind":"slider","url":"https://x","later":1}`,
+		{"DataDome", `{"body":"b","kind":"slider","url":"https://x","status":true,"submit_after_ms":1500,"later":1}`,
 			func() any { return &DataDomeSolution{} }},
 		{"Incapsula", `{"data":"{}","status":200,"later":1}`,
 			func() any { return &IncapsulaSolution{} }},

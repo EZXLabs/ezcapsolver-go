@@ -86,7 +86,7 @@ A captcha type can support both forms at once, and almost every type supports th
 
 | Task type | Modes | Example | Description |
 | :-: | :---: | :-: | --- |
-| `DataDomeTaskProxyless` | sync | [Example](#task-datadometaskproxyless) | The challenge after an interception, in two steps selected by `Step` |
+| `DataDomeTaskProxyless` | sync | [Example](#task-datadometaskproxyless) | The challenge after an interception, in three steps selected by `Step` |
 | `DataDomeTagsTaskProxyless` | sync | [Example](#task-datadometagstaskproxyless) | Reports a fingerprint on the normal browsing path |
 
 ### Other protection and forwarding tasks
@@ -103,7 +103,7 @@ A captcha type can support both forms at once, and almost every type supports th
 go get github.com/EZXLabs/ezcapsolver-go
 ```
 
-Requires Go 1.26+. **Zero third-party dependencies** — the standard library only, and nothing added to your dependency tree.
+Requires Go 1.26+.
 
 ## 🚀 Quick Start
 
@@ -598,7 +598,7 @@ fmt.Println("payload:", solved.Solution.Payload)
 
 #### DataDomeTaskProxyless
 
-The challenge after a DataDome interception runs in two steps that share `DataDomeTask` and are selected by `Step`; which fields of `DataDomeSolution` carry a value depends on the step:
+The challenge after a DataDome interception runs in three steps. All share `DataDomeTask` and are selected by `Step`. Step one turns the intercepted page into the challenge address, step two asks whether the service already caches the challenge script by its `Hash`, and step three returns the submission in `URL`, `Body` and `SubmitAfterMs`:
 
 ```go
 // Step one: get the challenge address from the intercepted page.
@@ -612,7 +612,8 @@ if err != nil {
 
 fmt.Println("challenge address:", solved.Solution.URL)
 
-// Step two uses ezcapsolver.DataDomeStepTwo, and the result carries the validation Body.
+// Step two sends the script Hash and reads Status; step three sends the challenge
+// page with the script, or only its hash when it is cached.
 ```
 
 <a id="task-datadometagstaskproxyless"></a>
